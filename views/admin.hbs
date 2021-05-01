@@ -1,0 +1,425 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Administrative Dashboard</h1>
+  </div>
+  <h2>Team Administration</h2>
+  <div class="card w-75">
+    <h5 class="card-header">Create Team</h5>
+    <div class="card-body">
+      <form class="form" action="/teams" method="POST">
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" id="teamName" name="teamName" required>
+              <label for="floatingInputGrid">Team Name *</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" id="cpId" name="cpId">
+              <label for="floatingInputGrid">Team Number</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" id="cpUniqueCode" name="cpUniqueCode">
+              <label for="floatingInputGrid">Unique Code</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" aria-label="Floating label select example" name="division">
+                <option selected disabled>Select a Division</option>
+                <option value="open">Open</option>
+                <option value="platinum">Platinum</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+              </select>
+              <label for="floatingSelect">Choose Division</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Create Team</button>
+          </div>
+          <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" hidden>
+              Team created!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+
+  <div class="card w-75">
+    <h5 class="card-header">Delete Team</h5>
+    <div class="card-body">
+      <form class="form" id="deleteTeam" action="" method="POST">
+        <input type="hidden" name="_method" value="DELETE">
+        <div class="form-floating">
+          <select class="form-select" id="deleteTeamSelect" aria-label="Floating label select example" onchange="deleteTeamChange()">
+            <option selected disabled>Select a Team</option>
+            {{#each teams}}
+            <option value="{{_id}}">{{teamName}}({{cpId}})</option>
+            {{/each}}
+          </select>
+          <label for="floatingSelect">Choose Team to Delete</label>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Delete Team</button>
+          </div>
+          <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" hidden>
+              Team created!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+
+  <div class="card w-75">
+    <h5 class="card-header">Modify Team</h5>
+    <div class="card-body">
+      <form class="form" id="modifyTeamSelect">
+        <div class="form-floating">
+          <select class="form-select" id="modifyTeamSelectTeam" aria-label="Floating label select example" onchange="getTeam()">
+            <option selected disabled>Select a Team</option>
+            {{#each teams}}
+            <option value="{{_id}}">{{teamName}}({{cpId}})</option>
+            {{/each}}
+          </select>
+          <label for="floatingSelect">Choose Team to Modify</label>
+        </div>
+      </form>
+      <br>
+      <form class="form" id="modifyTeam" action=" " method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" id="modifyTeamName" name="teamName" required>
+              <label for="floatingInputGrid">Team Name *</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" id="modifycpId" name="cpId">
+              <label for="floatingInputGrid">Team Number</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" id="modifyCpUniqueCode" name="cpUniqueCode">
+              <label for="floatingInputGrid">Unique Code</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" aria-label="Floating label select example" id="modifyDivision" name="division">
+                <option selected disabled>Select a Division</option>
+                <option value="open">Open</option>
+                <option value="platinum">Platinum</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+              </select>
+              <label for="floatingSelect">Choose Division</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Modify Team</button>
+          </div>
+          <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" hidden>
+              Team created!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+
+  <div class="card w-75">
+    <h5 class="card-header">Add User to Team</h5>
+    <div class="card-body">
+      <form class="form" id="userTeamAdd" action=" " method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" id="userTeamAddTeamSelect" aria-label="Floating label select example" name="cpId">
+                <option selected disabled>Select a Team</option>
+                {{#each teams}}
+                <option value="{{_id}}">{{teamName}}({{cpId}})</option>
+                {{/each}}
+              </select>
+              <label for="floatingSelect">Choose Team</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" id="userTeamAddUserSelect" aria-label="Floating label select example" name="userId" onchange="userTeamAddChange()">
+                <option selected disabled>Select a User</option>
+                {{#each users}}
+                <option value="{{_id}}">{{displayName}}({{email}})</option>
+                {{/each}}
+              </select>
+              <label for="floatingSelect">Choose User to Add</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Add User to Team</button>
+          </div>
+          <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" hidden>
+              Team created!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+  <br>
+
+  <h2>User Administration</h2>
+  <div class="card w-75">
+    <h5 class="card-header">Enable Account</h5>
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-md">
+          <form class="form" action="/allow/old" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <div class="form-floating">
+              <select class="form-select" aria-label="Floating label select example" name="id">
+                <option selected disabled>Select an Existing User</option>
+                {{#each users}}
+                <option value="{{_id}}">{{displayName}}({{email}})</option>
+                {{/each}}
+              </select>
+              <label for="floatingSelect">Choose User to Add</label>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col">
+                <button type="submit" class="btn btn-outline-secondary">Enable Existing User</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md">
+          <form class="form" action="/allow/new" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="email">
+              <label for="floatingInputGrid">Email of Future User</label>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col">
+                <button type="submit" class="btn btn-outline-secondary">Enable Future User</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="card w-75">
+    <h5 class="card-header">Disable Account</h5>
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-md">
+          <form class="form" action="/allow/disable" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <div class="form-floating">
+              <select class="form-select" aria-label="Floating label select example" name="id">
+                <option selected disabled>Select an Existing User</option>
+                {{#each users}}
+                <option value="{{_id}}">{{displayName}}({{email}})</option>
+                {{/each}}
+              </select>
+              <label for="floatingSelect">Choose User to Disable</label>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col">
+                <button type="submit" class="btn btn-outline-secondary">Disable Existing User</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+
+  <h2>Round Administration</h2>
+  <div class="card w-75">
+    <h5 class="card-header">Create Round</h5>
+    <div class="card-body">
+      <form class="form" action="/competition" method="POST">
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="title">
+              <label for="floatingInputGrid">Name of Round *</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" aria-label="Floating label select example" name="division">
+                <option selected disabled>Select a Division</option>
+                <option value="open">Open</option>
+                <option value="platinum">Platinum</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+              </select>
+              <label for="floatingSelect">Select Division *</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="windowsTenLink">
+              <label for="floatingInputGrid">Window 10 Image Link</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="windowsTenChecksum">
+              <label for="floatingInputGrid">Window 10 Image Checksum</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="windowsServerLink">
+              <label for="floatingInputGrid">Window Server Image Link</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="windowsServerChecksum">
+              <label for="floatingInputGrid">Window Server Image Checksum</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="ubuntuLink">
+              <label for="floatingInputGrid">Ubuntu Image Link</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="ubuntuChecksum">
+              <label for="floatingInputGrid">Ubuntu Image Checksum</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="debianLink">
+              <label for="floatingInputGrid">Debian Image Link</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="string" class="form-control" name="debianChecksum">
+              <label for="floatingInputGrid">Debian Image Checksum</label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="public" id="flexCheckDefault" name="status">
+              <label class="form-check-label" for="flexCheckDefault">
+                Make public on publish date
+              </label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input class="form-control" type="datetime-local" name="datePublish">
+              <label for="floatingSelect">Publish Date *</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input class="form-control" type="datetime-local" name="dateRemove">
+              <label for="floatingSelect">Removal Date *</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="d-flex justify-content-evenly">
+              <button type="submit" class="btn btn-outline-secondary">Create Round</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+
+  <div class="card w-75">
+    <h5 class="card-header">Delete Round</h5>
+    <div class="card-body">
+      <form class="form" id="deleteRound" action="" method="POST">
+        <input type="hidden" name="_method" value="DELETE">
+        <div class="form-floating">
+          <select class="form-select" id="deleteRoundSelect" aria-label="Floating label select example" onchange="deleteRoundChange()">
+            <option selected disabled>Select a Round</option>
+            {{#each rounds}}
+            <option value="{{_id}}">{{title}}({{division}})</option>
+            {{/each}}
+          </select>
+          <label for="floatingSelect">Choose Round to Delete</label>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Delete Round</button>
+          </div>
+          <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" hidden>
+              Team created!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+</main>
